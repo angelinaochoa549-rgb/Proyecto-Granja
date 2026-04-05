@@ -6,6 +6,7 @@
 <title>Manjares Del Campo — Manjares del campo, sabores de verdad</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="css/cart.css">
 </head>
 <body>
 
@@ -19,9 +20,17 @@
     <li><a href="#">Inicio</a></li>
     <li><a href="#productos">Nuestros Productos</a></li>
     <li><a href="#nosotros">Nuestra Historia</a></li>
-    <li><a href="#">Galería</a></li>
     <li><a href="#contacto">Contacto</a></li>
+    <!-- Botón del carrito -->
+    <li>
+      <button class="nav-cart-btn" onclick="toggleCart()" title="Ver carrito">
+        🛒 <span id="cart-count" class="cart-count">0</span>
+      </button>
+    </li>
+    <!-- WhatsApp CTA -->
     <li><a href="https://wa.me/573001234567" class="nav-cta">Pedir por WhatsApp</a></li>
+    <!-- Admin link (discreto) -->
+    <li><a href="admin/login.html" class="nav-admin-link" title="Administración">⚙️</a></li>
   </ul>
 </nav>
 
@@ -38,7 +47,6 @@
     </div>
   </div>
   <div class="hero-image-col">
-    <!-- Imagen de fondo del hero -->
     <img src="img/fondo.jpg" alt="Productos del campo" />
   </div>
   <div class="hero-stats">
@@ -58,54 +66,19 @@
     </div>
     <a href="#" class="btn-catalog">Ver Catálogo Completo →</a>
   </div>
-  <div class="products-grid">
 
-    <!-- PRODUCTO 1: Suero (ocupa 2 columnas) -->
-    <div class="product-card">
-      <img src="img/suero.jpg" alt="Suero Costeño" class="product-img">
-      <div class="product-info">
-        <p class="product-name">Suero Costeño</p>
-        <p class="product-unit">1 Litro · Receta tradicional</p>
-        <div class="product-bottom">
-          <span class="product-price">COP $6.000 / litro</span>
-          <button class="product-add" onclick="addToCart('Suero Costeño')">+ Agregar</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- PRODUCTO 2: Huevos -->
-    <div class="product-card">
-      <img src="img/huevos.jpg" alt="Huevos de Campo" class="product-img">
-      <div class="product-info">
-        <p class="product-name">Huevos de Campo</p>
-        <p class="product-unit">Docena · Gallinas libres</p>
-        <div class="product-bottom">
-          <span class="product-price">COP $9.000 / docena</span>
-          <button class="product-add" onclick="addToCart('Huevos de Campo')">+ Agregar</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- PRODUCTO 3: Queso -->
-    <div class="product-card">
-      <img src="img/queso.jpg" alt="Queso Fresco" class="product-img">
-      <div class="product-info">
-        <p class="product-name">Queso Fresco</p>
-        <p class="product-unit">500g · Hecho a mano</p>
-        <div class="product-bottom">
-          <span class="product-price">COP $15.000 / 500g</span>
-          <button class="product-add" onclick="addToCart('Queso Fresco')">+ Agregar</button>
-        </div>
-      </div>
-    </div>
-
+  <!-- Catálogo dinámico: se carga desde la API -->
+  <div class="products-grid" id="products-grid">
+    <!-- Skeleton loaders mientras carga -->
+    <div class="product-card skeleton-card"></div>
+    <div class="product-card skeleton-card"></div>
+    <div class="product-card skeleton-card"></div>
   </div>
 </section>
 
 <!-- ===== NOSOTROS ===== -->
 <section class="about" id="nosotros">
   <div class="about-img-wrap">
-    <!-- Puedes cambiar esta imagen por una foto tuya -->
     <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=700&q=80" alt="Productora del campo" />
     <div class="about-badge">
       <div class="badge-icon">🌾</div>
@@ -162,7 +135,6 @@
     <h2>¿Listo para pedir?</h2>
     <p>Escríbenos por WhatsApp y recibe tu pedido fresco en casa. ¡Es fácil y rápido!</p>
   </div>
-  <!-- Cambia el número de WhatsApp aquí -->
   <a href="https://wa.me/573001234567?text=Hola%2C%20quiero%20hacer%20un%20pedido" class="btn-wa" target="_blank">
     📲 Pedir por WhatsApp
   </a>
@@ -180,14 +152,12 @@
       <ul class="footer-links">
         <li><a href="#">Inicio</a></li>
         <li><a href="#">Nuestra Historia</a></li>
-        <li><a href="#">Nuestros Productos</a></li>
-        <li><a href="#">Galería</a></li>
-        <li><a href="#">Contacto</a></li>
+        <li><a href="#productos">Nuestros Productos</a></li>
+        <li><a href="#contacto">Contacto</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Contacto</h4>
-      <!-- Cambia estos datos con los tuyos -->
       <div class="footer-contact-item"><span>📍</span><span>Barranquilla, Colombia</span></div>
       <div class="footer-contact-item"><span>📱</span><span>+57 300 123 4567</span></div>
       <div class="footer-contact-item"><span>✉️</span><span>hola@manjaresdelcampo.co</span></div>
@@ -210,6 +180,59 @@
   </div>
 </footer>
 
+<!-- ===== PANEL DEL CARRITO (Sidebar) ===== -->
+<div id="cart-overlay" class="cart-overlay" onclick="toggleCart()"></div>
+<aside id="cart-panel" class="cart-panel">
+  <div class="cart-header">
+    <h3>🛒 Tu Pedido</h3>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div id="cart-items" class="cart-items">
+    <p class="cart-empty">Tu carrito está vacío.<br>¡Agrega productos frescos!</p>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Total:</span>
+      <strong id="cart-total-price">COP $0</strong>
+    </div>
+    <button class="btn-checkout" onclick="openCheckout()">Confirmar Pedido →</button>
+  </div>
+</aside>
+
+<!-- ===== MODAL DE CHECKOUT ===== -->
+<div id="checkout-modal" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>📦 Confirmar Pedido</h3>
+      <button onclick="closeCheckout()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-subtitle">Completa tus datos para enviar el pedido por WhatsApp</p>
+      <div class="form-group">
+        <label>Nombre completo *</label>
+        <input type="text" id="customer-name" placeholder="Tu nombre" />
+      </div>
+      <div class="form-group">
+        <label>Teléfono *</label>
+        <input type="tel" id="customer-phone" placeholder="+57 300 000 0000" />
+      </div>
+      <div class="form-group">
+        <label>Dirección de entrega *</label>
+        <input type="text" id="customer-address" placeholder="Barrio, calle, número..." />
+      </div>
+      <div class="order-summary" id="order-summary-preview"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeCheckout()">Cancelar</button>
+      <button class="btn-whatsapp" onclick="sendToWhatsApp()">
+        📲 Enviar por WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
 <script src="script.js"></script>
+<script src="js/api.js"></script>
+<script src="js/cart.js"></script>
 </body>
 </html>
