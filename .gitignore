@@ -1,0 +1,25 @@
+# ===== ENTORNO PYTHON =====
+.env
+.env.local
+.env.production
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# ===== FASTAPI / UVICORN =====
+*.log
+
+# ===== NODE =====
+node_modules/
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== EDITORES =====
+.vscode/
+.idea/
+*.swp
